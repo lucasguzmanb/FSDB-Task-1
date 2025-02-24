@@ -1,0 +1,4 @@
+cambiar diseño autores
+	añadir columna años nacimiento y muerte
+	añadir columna es_autor?
+añadir bibus fechas itv
