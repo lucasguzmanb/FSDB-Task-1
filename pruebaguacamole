@@ -5,7 +5,7 @@ desc NOMBRE de la file para ver las columnas
 
 SELECT * FROM fsdb.loans WHERE TRIM(RETURN) IS NULL;
 SELECT date_time, return, user_id FROM  fsdb.loans;
-
+SELECT 
 
 //Para Sanctions debería tener(id, user_id, loan_id, sanction_days, start_date, end_date)
 
@@ -16,9 +16,9 @@ WHERE RETURN IS NOT NULL
 AND TO_DATE(RETURN, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(DATE_TIME, 'DD/MM/YYYY HH24:MI:SS') > 14; 
 
 
-//Para users debería tener(user_id, name, surname, passport, birthdate, municipality_id, adress, email, telephone, user_type)
+//Para users debería tener(user_id, name, surname1, surname2, passport, birthdate, town, municipality_id, address, email, telephone, user_type)
 
-
+ SELECT user_id, name, surname1, surname2, passport, birthdate, town, address, email, phone   FROM fsdb.loans WHERE name NOT LIKE 'Biblioteca%'      
 
 //Para reservations debería tener(id, copy_id, user_id, route_id)
 
