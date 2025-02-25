@@ -4,7 +4,7 @@ SELECT * FROM fsdb.loans WHERE TRIM(RETURN) IS NULL;
 SELECT date_time, return, user_id FROM  fsdb.loans;
 
 
-//Para Sanctions debería tener(id, user_id, loan_id, weeks, start_date, end_date)
+//Para Sanctions debería tener(id, user_id, loan_id, sanction_days, start_date, end_date)
 
     //Con esto selecciono las que tienen sanction
 SELECT date_time, return, user_id 
