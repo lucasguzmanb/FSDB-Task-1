@@ -1,3 +1,6 @@
+desc NOMBRE de la file para ver las columnas
+
+
 //Para loans debería tener(id, start_date, return_date, user_id, copy_id, returned, real_return_date)
 
 SELECT * FROM fsdb.loans WHERE TRIM(RETURN) IS NULL;
