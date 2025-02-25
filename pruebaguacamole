@@ -1,0 +1,2 @@
+SELECT * FROM fsdb.loans WHERE TRIM(RETURN) IS NULL;
+SELECT date_time, return, user_id FROM  fsdb.loans;
