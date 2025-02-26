@@ -19,6 +19,8 @@ AND TO_DATE(RETURN, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(DATE_TIME, 'DD/MM/YYYY HH
 //Para users debería tener(user_id, name, surname1, surname2, passport, birthdate, town, municipality_id, address, email, telephone, user_type)
 
  SELECT user_id, name, surname1, surname2, passport, birthdate, town, address, email, phone   FROM fsdb.loans WHERE name NOT LIKE 'Biblioteca%'      
+//para user_type tengo q poner 1 si es biblioteca y 0 si no//
+
 
 //Para reservations debería tener(id, copy_id, user_id, route_id)
 
