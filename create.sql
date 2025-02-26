@@ -141,8 +141,8 @@ CREATE TABLE routes (
     id NUMBER PRIMARY KEY,
     stop_day DATE NOT NULL,
     municipality_id NUMBER NOT NULL REFERENCES municipalities(id),
-    bibus_id NUMBER NOT NULL REFERENCES bibuses(plate),
-    bibusero_id NUMBER NOT NULL REFERENCES bibuseros(id)
+    bibus_id VARCHAR2(255) NOT NULL REFERENCES bibuses(plate),
+    bibusero_id VARCHAR2(255) NOT NULL REFERENCES bibuseros(passport)
 );
 
 CREATE TABLE reservation (
