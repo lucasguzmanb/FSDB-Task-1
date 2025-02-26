@@ -5,7 +5,7 @@ desc NOMBRE de la file para ver las columnas
 
 SELECT * FROM fsdb.loans WHERE TRIM(RETURN) IS NULL;
 SELECT signature, date_time, return, user_id FROM  fsdb.loans;
-SELECT 
+SELECT copy_id FROM copies
 
 //Para Sanctions debería tener(id, user_id, loan_id, sanction_days, start_date, end_date)
 
