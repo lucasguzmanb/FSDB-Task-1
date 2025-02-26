@@ -26,6 +26,7 @@ AND TO_DATE(RETURN, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(DATE_TIME, 'DD/MM/YYYY HH
 
 
 
-//Para publications debería tener(
-
+//Para publications debería tener( ISBN, book_id, main_language, other_languages, edition, publisher, lenght, series, legal_deposit, publication_place, dimensions, physical_chars, additional_material, additional_notes, national_id, URL)
+SELECT ISBN, main_language, other_languages, edition, publisher, extension, series, pub_place, dimensions, physical_features, attached_materials, additional_notes, national_lib_id, URL FROM  fsdb.acervus
+SELECT id FROM books
 
