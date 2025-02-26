@@ -85,9 +85,11 @@ CREATE TABLE bibuses (
 CREATE TABLE users (
     id NUMBER PRIMARY KEY,
     name VARCHAR2(255) NOT NULL,
-    surname VARCHAR2(255) NOT NULL,
+    surname1 VARCHAR2(255) NOT NULL,
+    surname2 VARCHAR2(255) NOT NULL,
     passport NUMBER NOT NULL UNIQUE,
     birthdate DATE NOT NULL,
+    town VARCHAR2(255) NOT NULL,
     municipality_id NUMBER NOT NULL REFERENCES municipalities(id),
     address VARCHAR2(255) NOT NULL,
     email VARCHAR2(255) NULL,
