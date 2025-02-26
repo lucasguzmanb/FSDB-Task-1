@@ -4,8 +4,8 @@ desc NOMBRE de la file para ver las columnas
 //Para loans debería tener(loan_id, start_date, return_date, user_id, copy_id, returned, real_return_date)
 
 SELECT * FROM fsdb.loans WHERE TRIM(RETURN) IS NULL;
-SELECT signature, date_time, return, user_id FROM  fsdb.loans;
-SELECT copy_id FROM copies
+SELECT signature, date_time, return, user_id FROM  fsdb.loans
+SELECT id FROM copies;
 
 //Para Sanctions debería tener(id, user_id, loan_id, sanction_days, start_date, end_date)
 
