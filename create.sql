@@ -95,7 +95,7 @@ CREATE TABLE users (
     address VARCHAR2(255) NOT NULL,
     email VARCHAR2(255) NULL,
     telephone NUMBER NOT NULL,
-    user_type VARCHAR2(255) NOT NULL
+    is_library NUMBER(1) NOT NULL
 );
 
 CREATE TABLE loans (
