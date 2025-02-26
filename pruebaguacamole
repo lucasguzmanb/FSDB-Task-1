@@ -3,7 +3,6 @@ desc NOMBRE de la file para ver las columnas
 
 //Para loans debería tener(loan_id, start_date, return_date, user_id, copy_id, returned, real_return_date)
 
-SELECT * FROM fsdb.loans WHERE TRIM(RETURN) IS NULL;
 SELECT signature, date_time, return, user_id FROM  fsdb.loans
 SELECT id FROM copies;
 
@@ -18,8 +17,22 @@ AND TO_DATE(RETURN, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(DATE_TIME, 'DD/MM/YYYY HH
 
 //Para users debería tener(user_id, name, surname1, surname2, passport, birthdate, town, municipality_id, address, email, telephone, user_type)
 
- SELECT user_id, name, surname1, surname2, passport, birthdate, town, address, email, phone   FROM fsdb.loans WHERE name NOT LIKE 'Biblioteca%'      
+ SELECT user_id, name, surname1, surname2, passport, birthdate, town, address, email, phone FROM fsdb.loans
+
 //para user_type tengo q poner 1 si es biblioteca y 0 si no//
+
+INSERT INTO users (id, name, surname1, surname2, passport, birthdate, town, municipality_id, address, email, telephone, is_library)
+SELECT l.user_id, l.name, l.surname1, l.surname2, l.passport, 
+       TO_DATE(l.birthdate, 'DD-MM-YYYY'), 
+       l.town, 
+       (SELECT m.id FROM municipalities m WHERE m.name = l.town), -- Buscamos el municipality_id
+       l.address, l.email, l.phone,
+       CASE 
+           WHEN UPPER(l.name) LIKE 'BIBLIOTECA%' THEN 1 
+           ELSE 0 
+       END AS is_library
+FROM fsdb.loans l;
+
 
 
 //Para reservations debería tener(id, copy_id, user_id, route_id)
