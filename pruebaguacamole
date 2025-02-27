@@ -8,7 +8,8 @@ SELECT id FROM copies;
 
 //Para Sanctions debería tener(id, user_id, loan_id, sanction_days, start_date, end_date)
 //el id de sanctions lo tengo que crear.
-SELECT id FROM loans W
+SELECT id FROM users
+SELECT id FROM loans //seleccionar loan_id
     //Con esto selecciono las que tienen sanction
 SELECT date_time, return, user_id 
 FROM fsdb.loans 
