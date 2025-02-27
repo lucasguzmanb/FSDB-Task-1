@@ -127,8 +127,7 @@ CREATE TABLE comments (
 
 CREATE TABLE bibuseros (
     passport VARCHAR2(255) PRIMARY KEY,
-    name VARCHAR2(255) NOT NULL,
-    surname VARCHAR2(255) NOT NULL,
+    fullname VARCHAR2(255) NOT NULL,
     telephone NUMBER NOT NULL,
     email VARCHAR2(255) NOT NULL,
     contract_start DATE NOT NULL,
