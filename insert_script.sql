@@ -104,3 +104,45 @@ WHERE title IS NOT NULL
     AND main_author IS NOT NULL
     AND isbn IS NOT NULL
     AND national_lib_id IS NOT NULL;
+
+
+--Users
+INSERT INTO users (
+    id, 
+    name, 
+    surname1, 
+    surname2, 
+    passport, 
+    birthdate, 
+    municipality_id, 
+    address, 
+    email, 
+    telephone, 
+    is_library
+)
+SELECT DISTINCT user_id, 
+       name, 
+       surname1, 
+       surname2, 
+       passport, 
+       TO_DATE(birthdate, 'DD-MM-YYYY'), 
+       town, 
+       address, 
+       email, 
+       phone,
+       CASE 
+           WHEN UPPER(name) LIKE 'BIBLIOTECA%' THEN 1 
+           ELSE 0 
+       END
+FROM fsdb.loans  
+WHERE signature IS NOT NULL
+AND name IS NOT NULL
+AND surname1 IS NOT NULL
+AND passport IS NOT NULL
+AND birthdate IS NOT NULL
+AND town IS NOT NULL
+AND address IS NOT NULL
+AND phone IS NOT NULL
+AND user_id NOT IN (SELECT id FROM users);
+
+
