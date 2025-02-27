@@ -11,7 +11,7 @@ INSERT INTO books (
     pub_date, 
     alternative_titles, 
     subject, 
-    content_note, 
+    content_notes, 
     awards,
     other_authors,
     mention_authors
@@ -23,7 +23,7 @@ SELECT DISTINCT
     TO_NUMBER(pub_date),
     alternative_titles,
     subject,
-    content_note,
+    content_notes,
     awards,
     other_authors,
     mention_authors
