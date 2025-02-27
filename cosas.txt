@@ -1,4 +1,7 @@
 cambiar diseño autores
 	añadir columna años nacimiento y muerte
-	añadir columna es_autor?
 añadir bibus fechas itv
+cambiar diseño comments
+	cambiar book_id por copy_id (signature)
+eliminar tabla contributions y añadir a books mention authors
+tabla comments fusionar con loans y añadir const
