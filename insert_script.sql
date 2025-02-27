@@ -1,6 +1,7 @@
 -- AUTHORS
 INSERT INTO authors
 SELECT DISTINCT main_author
+FROM fsdb.acervus
 WHERE main_author IS NOT NULL;
 
 -- BOOKS
@@ -21,14 +22,14 @@ SELECT DISTINCT
     main_author,
     pub_country,
     TO_NUMBER(pub_date),
-    alternative_titles,
-    subject,
+    alt_title,
+    topic,
     content_notes,
     awards,
     other_authors,
     mention_authors
 FROM fsdb.acervus
-WHERE title IS NOT NULL;
+WHERE title IS NOT NULL AND main_author IS NOT NULL;
 
 -- COPIES
 INSERT INTO copies (
