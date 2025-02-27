@@ -52,7 +52,7 @@ CREATE TABLE publications (
 );
 
 CREATE TABLE copies (
-    id VARCHAR2(255) PRIMARY KEY,
+    id NUMBER PRIMARY KEY,
     publication_id VARCHAR2(255) NOT NULL REFERENCES publications(isbn),
     condition VARCHAR2(255) DEFAULT 'good',
     comments VARCHAR2(500) NULL,
