@@ -51,7 +51,6 @@ CREATE TABLE publications (
     publisher VARCHAR2(255) NOT NULL,
     length NUMBER NOT NULL,
     series VARCHAR2(50) NOT NULL,
-    legal_deposit VARCHAR2(50) NOT NULL,
     publication_place VARCHAR2(50) NOT NULL,
     dimensions VARCHAR2(50) NOT NULL,
     physical_chars VARCHAR2(255) NOT NULL,
