@@ -52,7 +52,7 @@ CREATE TABLE publications (
 );
 
 CREATE TABLE copies (
-    id NUMBER PRIMARY KEY,
+    id VARCHAR2(255) PRIMARY KEY,
     publication_id VARCHAR2(255) NOT NULL REFERENCES publications(isbn),
     condition VARCHAR2(255) DEFAULT 'good',
     comments VARCHAR2(500) NULL,
@@ -89,7 +89,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE loans (
-    id VARCHAR2(255) PRIMARY KEY,
+    id NUMBER PRIMARY KEY,
     start_date DATE NOT NULL,
     return_date DATE NOT NULL,
     user_id NUMBER NOT NULL REFERENCES users(id),
