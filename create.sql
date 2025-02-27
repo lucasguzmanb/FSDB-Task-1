@@ -2,7 +2,6 @@ DROP TABLE libraries;
 DROP TABLE reservation;
 DROP TABLE routes;
 DROP TABLE bibuseros;
-DROP TABLE comments;
 DROP TABLE sanctions;
 DROP TABLE loans;
 DROP TABLE users;
@@ -10,17 +9,16 @@ DROP TABLE bibuses;
 DROP TABLE municipalities;
 DROP TABLE copies;
 DROP TABLE publications;
-DROP TABLE contributions;
 DROP TABLE books;
 DROP TABLE authors;
 
 CREATE TABLE authors (
-    main_author VARCHAR2(255) PRIMARY KEY,
+    main_author VARCHAR2(255) PRIMARY KEY
 );
 
 CREATE TABLE books (
     title VARCHAR2(255) NOT NULL,
-    author_id NUMBER NOT NULL REFERENCES authors(main_author),
+    author_id VARCHAR2(255) NOT NULL REFERENCES authors(main_author),
     pub_country VARCHAR2(255) NULL,
     pub_date NUMBER(4) NULL,
     alternative_titles VARCHAR2(255) NULL,
@@ -28,13 +26,14 @@ CREATE TABLE books (
     content_note VARCHAR2(2500) NULL,
     awards VARCHAR2(255) NULL,
     other_authors VARCHAR2(255) NULL,
-    mention_authors VARCHAR2(255) NULL
-    CONSTRAINT book_pk PRIMARY KEY (title, author_id)
+    mention_authors VARCHAR2(255) NULL,
+    CONSTRAINT book_pk PRIMARY KEY(title, author_id)
 );
 
 CREATE TABLE publications (
     isbn VARCHAR2(255) PRIMARY KEY,
-    book_id NUMBER NOT NULL REFERENCES books(id),
+    book_title VARCHAR2(255) NOT NULL,
+    book_author_id VARCHAR2(255) NOT NULL,
     main_language VARCHAR2(50) NOT NULL,
     other_languages VARCHAR2(50) NOT NULL,
     edition VARCHAR2(50) NOT NULL,
@@ -47,7 +46,9 @@ CREATE TABLE publications (
     physical_chars VARCHAR2(255) NOT NULL,
     additional_material VARCHAR2(255) NULL,
     national_id NUMBER NOT NULL UNIQUE,
-    url VARCHAR2(255) NOT NULL
+    url VARCHAR2(255) NOT NULL,
+    CONSTRAINT publication_fk FOREIGN KEY (book_title, book_author_id)
+        REFERENCES books(title, author_id)
 );
 
 CREATE TABLE copies (
@@ -93,11 +94,11 @@ CREATE TABLE loans (
     start_date DATE NOT NULL,
     return_date DATE NOT NULL,
     user_id NUMBER NOT NULL REFERENCES users(id),
-    copy_id NUMBER NOT NULL REFERENCES copies(id),
+    copy_id VARCHAR2(255) NOT NULL REFERENCES copies(id),
     comment_date DATE NULL,
     body VARCHAR2(2000) NULL,
-    likes NUMBER NOT NULL DEFAULT 0,
-    dislikes NUMBER NOT NULL DEFAULT 0 
+    likes NUMBER DEFAULT 0,
+    dislikes NUMBER DEFAULT 0, 
     CONSTRAINT comment_date_ct CHECK (comment_date IS NULL OR comment_date > return_date)
 );
 
@@ -131,9 +132,9 @@ CREATE TABLE routes (
 
 CREATE TABLE reservation (
     id NUMBER PRIMARY KEY,
-    copy_id NUMBER NOT NULL REFERENCES copies(id),
+    copy_id VARCHAR2(255) NOT NULL REFERENCES copies(id),
     user_id NUMBER NOT NULL REFERENCES users(id),
-    route_id NUMBER NOT NULL REFERENCES routes(id),
+    route_id VARCHAR2(255) NOT NULL REFERENCES routes(id),
     reservation_date DATE NOT NULL,
     state VARCHAR2(255) NOT NULL        
 );
