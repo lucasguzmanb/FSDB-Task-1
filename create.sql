@@ -88,7 +88,7 @@ CREATE TABLE users (
     name VARCHAR2(255) NOT NULL,
     surname1 VARCHAR2(255) NOT NULL,
     surname2 VARCHAR2(255) NOT NULL,
-    passport NUMBER NOT NULL UNIQUE,
+    passport VARCHAR2(20) NOT NULL UNIQUE,
     birthdate DATE NOT NULL,
     town VARCHAR2(255) NOT NULL,
     municipality_id NUMBER NOT NULL REFERENCES municipalities(id),
