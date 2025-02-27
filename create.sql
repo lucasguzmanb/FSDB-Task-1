@@ -44,6 +44,7 @@ CREATE TABLE publications (
     dimensions VARCHAR2(50) NOT NULL,
     physical_chars VARCHAR2(255) NOT NULL,
     additional_material VARCHAR2(255) NULL,
+    content_note VARCHAR2(500) NULL,
     national_id NUMBER NOT NULL UNIQUE,
     url VARCHAR2(255) NOT NULL,
     CONSTRAINT publication_fk FOREIGN KEY (book_title, book_author_id)
