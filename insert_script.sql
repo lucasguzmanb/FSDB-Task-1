@@ -44,4 +44,5 @@ insert into (passport, fullname, telephone, email, contract_start, contract_end,
 select distinct lib_passport, lib_fullname,  lib_phone, lib_email, cont_start, cont_end  from fsdb.busstops;
 
 --Routes
-
+INSERT INTO routes (id, stop_day, stop_time, municipality_id, bibus_id, bibusero_id)
+SELECT route_id, stopdate, stoptime, town, plate, lib_passport FROM fsdb.busstops ;
