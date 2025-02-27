@@ -81,7 +81,7 @@ CREATE TABLE users (
     passport VARCHAR2(20) NOT NULL UNIQUE,
     birthdate DATE NOT NULL,
     town VARCHAR2(255) NOT NULL,
-    municipality_id NUMBER NOT NULL REFERENCES municipalities(name),
+    municipality_id VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
     address VARCHAR2(255) NOT NULL,
     email VARCHAR2(255) NULL,
     telephone NUMBER NOT NULL,
@@ -124,7 +124,7 @@ CREATE TABLE routes (
     id VARCHAR2(255) PRIMARY KEY,
     stop_day DATE NOT NULL,
     stop_time DATE NOT NULL,
-    municipality_id NUMBER NOT NULL REFERENCES municipalities(name),
+    municipality_id VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
     bibus_id VARCHAR2(255) NOT NULL REFERENCES bibuses(plate),
     bibusero_id VARCHAR2(255) NOT NULL REFERENCES bibuseros(passport)
 );
@@ -142,7 +142,7 @@ CREATE TABLE libraries (
     CIF NUMBER PRIMARY KEY,
     name VARCHAR2(255) NOT NULL,
     foundation_date DATE NOT NULL,
-    municipality_id NUMBER NOT NULL REFERENCES municipalities(name),
+    municipality_id VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
     address VARCHAR2(255) NOT NULL,
     email VARCHAR2(255) NOT NULL,
     telephone NUMBER NOT NULL
