@@ -36,7 +36,7 @@ INSERT INTO copies (
   id,
   publication_id,
   comments)
-SELECT
+SELECT DISTINCT
   signature,
   isbn,
   notes
