@@ -77,7 +77,7 @@ CREATE TABLE users (
     id NUMBER PRIMARY KEY,
     name VARCHAR2(255) NOT NULL,
     surname1 VARCHAR2(255) NOT NULL,
-    surname2 VARCHAR2(255) NOT NULL,
+    surname2 VARCHAR2(255) NULL,
     passport VARCHAR2(20) NOT NULL UNIQUE,
     birthdate DATE NOT NULL,
     town VARCHAR2(255) NOT NULL,
