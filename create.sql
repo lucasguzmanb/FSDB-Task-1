@@ -120,7 +120,7 @@ CREATE TABLE comments (
     user_id NUMBER NOT NULL REFERENCES users(id),
     comment_date DATE NOT NULL,
     copy_id VARCHAR2(255) NOT NULL REFERENCES copies(id),
-    body VARCHAR2(500) NOT NULL,
+    body VARCHAR2(2000) NOT NULL,
     likes NUMBER NOT NULL,
     dislikes NUMBER NOT NULL
 );
