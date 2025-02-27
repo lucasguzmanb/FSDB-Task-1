@@ -1,7 +1,7 @@
 desc NOMBRE de la file para ver las columnas
 
 
-//Para loans debería tener(loan_id, start_date, return_date, user_id, copy_id, returned, real_return_date)
+//Para loans debería tener(loan_id, start_date, return_date, user_id, copy_id, returned, real_return_date,comment_date, body, likes, dislikes)
 
 SELECT signature, date_time, return, user_id FROM  fsdb.loans
 SELECT id FROM copies;
@@ -20,9 +20,8 @@ AND TO_DATE(RETURN, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(DATE_TIME, 'DD/MM/YYYY HH
 
 //Podría ser así
 SELECT 
-    ROWNUM AS id,  -- Generate unique IDs
-    u.id AS user_id,  -- Get the user's ID from the `users` table
-    l.signature AS loan_id,  -- Use `signature` instead of `id`
+    u.id AS user_id,
+    l.signature AS loan_id,
     CEIL(TO_DATE(l.return, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(l.date_time, 'DD/MM/YYYY HH24:MI:SS') - 14) AS weeks,  
     TO_DATE(l.return, 'DD/MM/YYYY HH24:MI:SS') AS start_date,  
     TO_DATE(l.return, 'DD/MM/YYYY HH24:MI:SS') + (CEIL(TO_DATE(l.return, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(l.date_time, 'DD/MM/YYYY HH24:MI:SS') - 14) * 7) AS end_date  
@@ -50,10 +49,6 @@ SELECT l.user_id, l.name, l.surname1, l.surname2, l.passport,
            ELSE 0 
        END AS is_library
 FROM fsdb.loans l;
-
-
-
-//Para reservations debería tener(id, copy_id, user_id, route_id)
 
 
 
