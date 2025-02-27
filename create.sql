@@ -103,7 +103,7 @@ CREATE TABLE loans (
     start_date DATE NOT NULL,
     return_date DATE NOT NULL,
     user_id NUMBER NOT NULL REFERENCES users(id),
-    copy_id NUMBER NOT NULL REFERENCES copies(id)
+    copy_id VARCHAR2(10) NOT NULL REFERENCES copies(id)
 );
 
 CREATE TABLE sanctions (
