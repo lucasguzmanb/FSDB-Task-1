@@ -6,15 +6,31 @@ desc NOMBRE de la file para ver las columnas
 SELECT signature, date_time, return, user_id FROM  fsdb.loans
 SELECT id FROM copies;
 
+
+
 //Para Sanctions debería tener(id, user_id, loan_id, sanction_days, start_date, end_date)
-//el id de sanctions lo tengo que crear.
-SELECT id FROM users
+SELECT DISTINCT ROWNUM //asi creo el id.
+SELECT id FROM users// selecciono el id de users
 SELECT id FROM loans //seleccionar loan_id
-    //Con esto selecciono las que tienen sanction
+//Con esto selecciono las que tienen sanction
 SELECT date_time, return, user_id 
 FROM fsdb.loans 
-WHERE RETURN IS NOT NULL 
+WHERE RETURN IS NOT NULL
 AND TO_DATE(RETURN, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(DATE_TIME, 'DD/MM/YYYY HH24:MI:SS') > 14; 
+
+//Podría ser así
+SELECT 
+    ROWNUM AS id,  -- Generate unique IDs
+    u.id AS user_id,  -- Get the user's ID from the `users` table
+    l.signature AS loan_id,  -- Use `signature` instead of `id`
+    CEIL(TO_DATE(l.return, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(l.date_time, 'DD/MM/YYYY HH24:MI:SS') - 14) AS weeks,  
+    TO_DATE(l.return, 'DD/MM/YYYY HH24:MI:SS') AS start_date,  
+    TO_DATE(l.return, 'DD/MM/YYYY HH24:MI:SS') + (CEIL(TO_DATE(l.return, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(l.date_time, 'DD/MM/YYYY HH24:MI:SS') - 14) * 7) AS end_date  
+FROM fsdb.loans l  
+JOIN users u ON u.passport = l.passport  -- Match users by passport
+WHERE l.return IS NOT NULL  
+AND TO_DATE(l.return, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(l.date_time, 'DD/MM/YYYY HH24:MI:SS') > 14;  
+
 
 
 //Para users debería tener(user_id, name, surname1, surname2, passport, birthdate, town, municipality_id, address, email, telephone, user_type)
