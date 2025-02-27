@@ -146,3 +146,29 @@ AND phone IS NOT NULL
 AND user_id IS NOT NULL;
 
 
+--loans
+INSERT INTO loans (
+    id, 
+    start_date, 
+    return_date, 
+    user_id, 
+    copy_id, 
+    comment_date, 
+    body, 
+    likes, 
+    dislikes
+)
+SELECT 
+    SIGNATURE AS id,  
+    TO_DATE(DATE_TIME, 'DD/MM/YYYY HH24:MI:SS') AS start_date,  
+    TO_DATE(RETURN, 'DD/MM/YYYY HH24:MI:SS') AS return_date,  
+    USER_ID,  
+    NULL AS copy_id,  
+    NULL AS comment_date,  
+    POST AS body,  
+    TO_NUMBER(LIKES) AS likes,  
+    TO_NUMBER(DISLIKES) AS dislikes  
+FROM fsdb.loans
+WHERE USER_ID IS NOT NULL  
+  AND SIGNATURE IS NOT NULL;
+
