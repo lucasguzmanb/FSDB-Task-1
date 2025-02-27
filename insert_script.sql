@@ -62,3 +62,45 @@ select distinct lib_passport, lib_fullname,  lib_phone, lib_email, TO_DATE(cont_
 --Routes
 INSERT INTO routes (id, stop_day, stop_time, municipality_id, bibus_id, bibusero_id)
 SELECT route_id, TO_DATE(stopdate, 'DD.MM.YYYY'), TO_TIMESTAMP(stoptime, 'HH24:MI:SS'), town, plate, lib_passport FROM fsdb.busstops;
+
+--Publications
+INSERT INTO publications (
+    isbn, 
+    book_title, 
+    book_author_id, 
+    main_language, 
+    other_languages, 
+    edition, 
+    publisher, 
+    length, 
+    series, 
+    publication_place, 
+    dimensions, 
+    physical_chars, 
+    additional_material, 
+    content_note, 
+    national_id, 
+    url
+)
+SELECT DISTINCT
+    isbn, 
+    title AS book_title, 
+    main_author AS book_author_id, 
+    main_language, 
+    other_languages, 
+    edition, 
+    publisher, 
+    extension AS length, 
+    series, 
+    pub_place AS publication_place, 
+    dimensions, 
+    physical_features AS physical_chars, 
+    attached_materials AS additional_material, 
+    notes AS content_note, 
+    national_lib_id AS national_id, 
+    URL
+FROM fsdb.acervus
+WHERE title IS NOT NULL 
+    AND main_author IS NOT NULL
+    AND isbn IS NOT NULL
+    AND national_lib_id IS NOT NULL;
