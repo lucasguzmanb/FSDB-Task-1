@@ -43,7 +43,7 @@ CREATE TABLE contributions (
 );
 
 CREATE TABLE publications (
-    isbn NUMBER PRIMARY KEY,
+    isbn VARCHAR2(255) PRIMARY KEY,
     book_id NUMBER NOT NULL REFERENCES books(id),
     main_language VARCHAR2(50) NOT NULL,
     other_languages VARCHAR2(50) NOT NULL,
@@ -62,10 +62,10 @@ CREATE TABLE publications (
 
 CREATE TABLE copies (
     id VARCHAR2(255) PRIMARY KEY,
-    publication_id NUMBER NOT NULL,
-    condition VARCHAR2(255) NOT NULL,
+    publication_id VARCHAR2(255) NOT NULL REFERENCES publications(isbn),
+    condition VARCHAR2(255) DEFAULT 'good',
     comments VARCHAR2(500) NOT NULL,
-    available NUMBER(1) NOT NULL,
+    available NUMBER(1) DEFAULT 1 NOT NULL,
     derregistration_date DATE NULL
 );
 
