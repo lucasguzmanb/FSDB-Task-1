@@ -25,3 +25,23 @@ SELECT DISTINCT
   END AS role
 FROM fsdb.acervus
 FETCH FIRST 50 ROWS only;
+
+-- Municipalities
+INSERT INTO municipalities (name, province, population, has_library)
+SELECT DISTINCT  TOWN, province TO_NUMBER(POPULATION), CASE WHEN HAS_LIBRARY = 'Y' THEN 1 ELSE 0 END FROM fsdb.busstops;
+
+-- Libraries
+insert into libraries (CIF, name, foundation_date, municipality_id, address, email, telephone)
+select distinct user_id, name, birthdate, town, address, email, phone from fsdb.loans where UPPER(name) like '%BIBLIOTECA%';
+
+-- Bibus
+insert into bibuses (plate, last_itv, next_itv, state)
+SELECT plate, TO_CHAR(MAX(TO_DATE(last_itv, 'DD.MM.YYYY // HH24:MI:SS')), 'DD.MM.YYYY // HH24:MI:SS'), 
+TO_CHAR(MIN(TO_DATE(next_itv, 'DD.MM.YYYY')), 'DD.MM.YYYY') FROM fsdb.busstops GROUP BY plate;
+
+--Bibuseros
+insert into (passport, fullname, telephone, email, contract_start, contract_end, state)
+select distinct lib_passport, lib_fullname,  lib_phone, lib_email, cont_start, cont_end  from fsdb.busstops;
+
+--Routes
+
