@@ -143,6 +143,6 @@ AND birthdate IS NOT NULL
 AND town IS NOT NULL
 AND address IS NOT NULL
 AND phone IS NOT NULL
-AND user_id NOT IN (SELECT id FROM users);
+AND user_id IS NOT NULL;
 
 
