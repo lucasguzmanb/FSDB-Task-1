@@ -45,7 +45,7 @@ CREATE TABLE publications (
     physical_chars VARCHAR2(255) NULL,
     additional_material VARCHAR2(255) NULL,
     content_note VARCHAR2(500) NULL,
-    national_id NUMBER NOT NULL UNIQUE,
+    national_id VARCHAR2(255) NOT NULL UNIQUE,
     url VARCHAR2(255) NULL,
     CONSTRAINT publication_fk FOREIGN KEY (book_title, book_author_id)
         REFERENCES books(title, author_id)
