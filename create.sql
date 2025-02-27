@@ -38,7 +38,7 @@ CREATE TABLE publications (
     other_languages VARCHAR2(50) NOT NULL,
     edition VARCHAR2(50) NOT NULL,
     publisher VARCHAR2(255) NOT NULL,
-    length NUMBER NOT NULL,
+    length VARCHAR2(50) NOT NULL,
     series VARCHAR2(50) NOT NULL,
     publication_place VARCHAR2(50) NOT NULL,
     dimensions VARCHAR2(50) NOT NULL,
