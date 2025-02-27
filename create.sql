@@ -89,7 +89,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE loans (
-    id NUMBER PRIMARY KEY,
+    id VARCHAR2(255) PRIMARY KEY,
     start_date DATE NOT NULL,
     return_date DATE NOT NULL,
     user_id NUMBER NOT NULL REFERENCES users(id),
