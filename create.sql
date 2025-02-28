@@ -30,7 +30,7 @@ CREATE TABLE books (
 );
 
 CREATE TABLE publications (
-    isbn VARCHAR2(255) PRIMARY KEY,
+    isbn VARCHAR2(255) NOT NULL,
     book_title VARCHAR2(255) NOT NULL,
     book_author_id VARCHAR2(255) NOT NULL,
     main_language VARCHAR2(50) NULL,
@@ -46,6 +46,7 @@ CREATE TABLE publications (
     content_note VARCHAR2(500) NULL,
     national_id VARCHAR2(255) NOT NULL UNIQUE,
     url VARCHAR2(255) NULL,
+    CONSTRAINT publication_pk PRIMARY KEY(isbn, edition)
     CONSTRAINT publication_fk FOREIGN KEY (book_title, book_author_id)
         REFERENCES books(title, author_id)
 );
