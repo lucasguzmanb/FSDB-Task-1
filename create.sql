@@ -22,7 +22,7 @@ CREATE TABLE books (
     pub_date NUMBER(4) NULL,
     alternative_titles VARCHAR2(255) NULL,
     subject VARCHAR2(255) NULL,
-    content_note VARCHAR2(2500) NULL,
+    content_notes VARCHAR2(2500) NULL,
     awards VARCHAR2(255) NULL,
     other_authors VARCHAR2(255) NULL,
     mention_authors VARCHAR2(255) NULL,
