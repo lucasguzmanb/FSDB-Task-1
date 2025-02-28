@@ -12,24 +12,25 @@ INSERT INTO books (
     pub_date, 
     alternative_titles, 
     subject, 
-    content_note, 
+    content_notes, 
     awards,
     other_authors,
     mention_authors
 )
-SELECT DISTINCT
+SELECT 
     title,
     main_author,
-    pub_country,
-    TO_NUMBER(pub_date),
-    alt_title,
-    topic,
-    content_notes,
-    awards,
-    other_authors,
-    mention_authors
+    MAX(pub_country),
+    TO_NUMBER(MAX(pub_date)),
+    MAX(alt_title),
+    MAX(topic),
+    MAX(content_notes),
+    MAX(awards),
+    MAX(other_authors),
+    MAX(mention_authors)
 FROM fsdb.acervus
-WHERE title IS NOT NULL AND main_author IS NOT NULL;
+WHERE title IS NOT NULL AND main_author IS NOT NULL
+GROUP BY title, main_author;
 
 -- COPIES
 INSERT INTO copies (
@@ -46,24 +47,24 @@ FROM fsdb.acervus;
 INSERT INTO municipalities (name, province, population, has_library)
 SELECT DISTINCT  TOWN, province, TO_NUMBER(POPULATION), CASE WHEN HAS_LIBRARY = 'Y' THEN 1 ELSE 0 END FROM fsdb.busstops;
 
--- Libraries
+-- LIBRARIES
 insert into libraries (CIF, name, foundation_date, municipality_id, address, email, telephone)
 select distinct user_id, name, TO_DATE(birthdate, 'DD.MM.YYYY'), town, address, email, phone from fsdb.loans where UPPER(name) like '%BIBLIOTECA%' AND town IN (SELECT name FROM municipalities);
 
--- Bibus
+-- BIBUS
 insert into bibuses (plate, last_itv, next_itv)
 SELECT plate, TO_DATE(MAX(TO_DATE(last_itv, 'DD.MM.YYYY // HH24:MI:SS')), 'DD.MM.YYYY // HH24:MI:SS'), 
 TO_DATE(MIN(TO_DATE(next_itv, 'DD.MM.YYYY')), 'DD.MM.YYYY') FROM fsdb.busstops GROUP BY plate;
 
---Bibuseros
+-- BIBUSEROS
 insert into bibuseros (passport, fullname, telephone, email, contract_start, contract_end)
 select distinct lib_passport, lib_fullname,  lib_phone, lib_email, TO_DATE(cont_start, 'DD.MM.YYYY'), TO_DATE(cont_end, 'DD.MM.YYYY')  from fsdb.busstops;
 
---Routes
+-- ROUTES
 INSERT INTO routes (id, stop_day, stop_time, municipality_id, bibus_id, bibusero_id)
 SELECT route_id, TO_DATE(stopdate, 'DD.MM.YYYY'), TO_TIMESTAMP(stoptime, 'HH24:MI:SS'), town, plate, lib_passport FROM fsdb.busstops;
 
---Publications
+-- PUBLICATIONS
 INSERT INTO publications (
     isbn, 
     book_title, 
@@ -106,7 +107,7 @@ WHERE title IS NOT NULL
     AND national_lib_id IS NOT NULL;
 
 
---Users
+-- USERS
 INSERT INTO users (
     id, 
     name, 
@@ -146,7 +147,7 @@ AND phone IS NOT NULL
 AND user_id IS NOT NULL;
 
 
---loans
+-- LOANS
 INSERT INTO loans (
     id, 
     start_date, 
@@ -172,9 +173,7 @@ WHERE SIGNATURE IS NOT NULL
   AND USER_ID IS NOT NULL
   AND RETURN IS NOT NULL;
 
-
---Sanctions
-
+-- SANCTIONS
 INSERT INTO sanctions (
     loan_id, 
     user_id, 
