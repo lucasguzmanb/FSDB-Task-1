@@ -96,6 +96,7 @@ CREATE TABLE loans (
     start_date DATE NOT NULL,
     return_date DATE NOT NULL,
     user_id NUMBER NOT NULL REFERENCES users(id),
+    is_reservation NUMBER(1) DEFAULT 0,
     comment_date DATE NULL,
     body VARCHAR2(2000) NULL,
     likes NUMBER DEFAULT 0,
