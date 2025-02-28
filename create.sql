@@ -79,7 +79,7 @@ CREATE TABLE bibuses (
     next_itv DATE NOT NULL,
     state VARCHAR2(255) DEFAULT 'available',
     CONSTRAINT correct_itv_date CHECK (last_itv < next_itv),
-    CONSTRAINT state_ct CHECK (state IN ('available', 'assigned', 'maintenance'))
+    CONSTRAINT state_bibus_ct CHECK (state IN ('available', 'assigned', 'maintenance'))
 );
 
 CREATE TABLE users (
