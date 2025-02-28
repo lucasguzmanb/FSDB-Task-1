@@ -12,7 +12,7 @@ INSERT INTO books (
     pub_date, 
     alternative_titles, 
     subject, 
-    content_notes, 
+    content_note, 
     awards,
     other_authors,
     mention_authors
