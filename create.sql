@@ -93,7 +93,6 @@ CREATE TABLE loans (
     start_date DATE NOT NULL,
     return_date DATE NOT NULL,
     user_id NUMBER NOT NULL REFERENCES users(id),
-    copy_id VARCHAR2(255) NOT NULL REFERENCES copies(id),
     comment_date DATE NULL,
     body VARCHAR2(2000) NULL,
     likes NUMBER DEFAULT 0,
