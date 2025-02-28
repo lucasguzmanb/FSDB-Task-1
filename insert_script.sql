@@ -201,8 +201,8 @@ INSERT INTO bibuseros (passport, fullname, telephone, email, contract_start, con
 SELECT DISTINCT lib_passport, lib_fullname,  lib_phone, lib_email, TO_DATE(cont_start, 'DD.MM.YYYY'), TO_DATE(cont_end, 'DD.MM.YYYY')  FROM fsdb.busstops;
 
 -- ROUTES
-INSERT INTO routes (id, stop_day, stop_time, town, bibus_id, bibusero_id)
-SELECT route_id, TO_DATE(stopdate, 'DD.MM.YYYY'), TO_TIMESTAMP(stoptime, 'HH24:MI:SS'), town, plate, lib_passport FROM fsdb.busstops;
+INSERT INTO routes (id, stop_day, town, bibus_id, bibusero_id)
+SELECT route_id, TO_DATE(stopdate, 'DD.MM.YYYY'), town, plate, lib_passport FROM fsdb.busstops;
 
 -- LIBRARIES
 INSERT INTO libraries (CIF, name, foundation_date, town, address, email, telephone)
