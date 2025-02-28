@@ -1,5 +1,4 @@
 DROP TABLE libraries;
-DROP TABLE reservation;
 DROP TABLE routes;
 DROP TABLE bibuseros;
 DROP TABLE sanctions;
