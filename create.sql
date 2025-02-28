@@ -20,6 +20,7 @@ CREATE TABLE books (
     author_id VARCHAR2(255) NOT NULL REFERENCES authors(main_author),
     pub_country VARCHAR2(255) NULL,
     pub_date NUMBER(4) NULL,
+    original_language VARCHAR2(50) NULL,
     alternative_titles VARCHAR2(255) NULL,
     subject VARCHAR2(255) NULL,
     content_notes VARCHAR2(2500) NULL,
@@ -54,14 +55,15 @@ CREATE TABLE publications (
 CREATE TABLE copies (
     id VARCHAR2(255) PRIMARY KEY,
     isbn VARCHAR2(255) NOT NULL,
-    edition VARCHAR2(50) DEFAULT 'Unknown',
+    edition VARCHAR2(50) DEFAULT 'unknown',
     national_id VARCHAR2(255) NOT NULL,
-    condition VARCHAR2(255) DEFAULT 'good',
+    condition VARCHAR2(255) DEFAULT 'unknown',
     comments VARCHAR2(500) NULL,
     available NUMBER(1) DEFAULT 1 NOT NULL,
     derregistration_date DATE NULL,
     CONSTRAINT copy_fk FOREIGN KEY (isbn, edition, national_id)
-        REFERENCES publications(isbn, edition, national_id)
+        REFERENCES publications(isbn, edition, national_id),
+    CONSTRAINT condition_ct CHECK (condition IN ('new', 'good', 'worn', 'very used', 'deteriorated', 'unknown'))
 );
 
 CREATE TABLE municipalities (
@@ -76,7 +78,8 @@ CREATE TABLE bibuses (
     last_itv DATE NOT NULL,
     next_itv DATE NOT NULL,
     state VARCHAR2(255) DEFAULT 'available',
-    CONSTRAINT correct_itv_date CHECK (last_itv < next_itv)
+    CONSTRAINT correct_itv_date CHECK (last_itv < next_itv),
+    CONSTRAINT state_bibus_ct CHECK (state IN ('available', 'assigned', 'maintenance'))
 );
 
 CREATE TABLE users (
@@ -89,7 +92,7 @@ CREATE TABLE users (
     town VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
     address VARCHAR2(255) NOT NULL,
     email VARCHAR2(255) NULL,
-    telephone(9) NUMBER NOT NULL
+    telephone NUMBER(9) NOT NULL
 );
 
 CREATE TABLE loans (
@@ -120,7 +123,8 @@ CREATE TABLE bibuseros (
     email VARCHAR2(255) NOT NULL,
     contract_start DATE NOT NULL,
     contract_end DATE NULL,
-    state VARCHAR2(255) DEFAULT 'assigned'
+    state VARCHAR2(255) DEFAULT 'assigned',
+    CONSTRAINT state_bibusero_ct CHECK (state IN ('assigned', 'day off', 'occupied'))
 );
 
 CREATE TABLE routes (
