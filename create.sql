@@ -89,7 +89,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE loans (
-    id NUMBER PRIMARY KEY,
+    id VARCHAR2(255) PRIMARY KEY,
     start_date DATE NOT NULL,
     return_date DATE NOT NULL,
     user_id NUMBER NOT NULL REFERENCES users(id),
@@ -102,9 +102,8 @@ CREATE TABLE loans (
 );
 
 CREATE TABLE sanctions (
-    id NUMBER PRIMARY KEY,
+    loan_id VARCHAR2(255) PRIMARY KEY REFERENCES loans(id),
     user_id NUMBER NOT NULL REFERENCES users(id),
-    loan_id NUMBER NOT NULL REFERENCES loans(id),
     weeks NUMBER NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL
