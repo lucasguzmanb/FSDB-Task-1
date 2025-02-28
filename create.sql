@@ -76,7 +76,8 @@ CREATE TABLE bibuses (
     plate VARCHAR2(255) PRIMARY KEY,
     last_itv DATE NOT NULL,
     next_itv DATE NOT NULL,
-    state VARCHAR2(255) DEFAULT 'available'
+    state VARCHAR2(255) DEFAULT 'available',
+    CONSTRAINT correct_itv_date CHECK (last_itv < next_itv)
 );
 
 CREATE TABLE users (
@@ -89,7 +90,7 @@ CREATE TABLE users (
     town VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
     address VARCHAR2(255) NOT NULL,
     email VARCHAR2(255) NULL,
-    telephone NUMBER NOT NULL
+    telephone(9) NUMBER NOT NULL
 );
 
 CREATE TABLE loans (
@@ -116,7 +117,7 @@ CREATE TABLE sanctions (
 CREATE TABLE bibuseros (
     passport VARCHAR2(255) PRIMARY KEY,
     fullname VARCHAR2(255) NOT NULL,
-    telephone NUMBER NOT NULL,
+    telephone NUMBER(9) NOT NULL,
     email VARCHAR2(255) NOT NULL,
     contract_start DATE NOT NULL,
     contract_end DATE NULL,
@@ -126,7 +127,6 @@ CREATE TABLE bibuseros (
 CREATE TABLE routes (
     id VARCHAR2(255) NOT NULL,
     stop_day DATE NOT NULL,
-    stop_time DATE NOT NULL,
     town VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
     bibus_id VARCHAR2(255) NOT NULL REFERENCES bibuses(plate),
     bibusero_id VARCHAR2(255) NOT NULL REFERENCES bibuseros(passport),
@@ -140,5 +140,5 @@ CREATE TABLE libraries (
     town VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
     address VARCHAR2(255) NOT NULL,
     email VARCHAR2(255) NOT NULL,
-    telephone NUMBER NOT NULL
+    telephone NUMBER(9) NOT NULL
 );

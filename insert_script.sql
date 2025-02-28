@@ -103,7 +103,7 @@ SELECT DISTINCT  TOWN, province, TO_NUMBER(POPULATION), CASE WHEN HAS_LIBRARY = 
 -- BIBUSES
 insert into bibuses (plate, last_itv, next_itv)
 SELECT plate, TO_DATE(MAX(TO_DATE(last_itv, 'DD.MM.YYYY // HH24:MI:SS')), 'DD.MM.YYYY // HH24:MI:SS'), 
-TO_DATE(MIN(TO_DATE(next_itv, 'DD.MM.YYYY')), 'DD.MM.YYYY') FROM fsdb.busstops GROUP BY plate;
+TO_DATE(MAX(TO_DATE(next_itv, 'DD.MM.YYYY')), 'DD.MM.YYYY') FROM fsdb.busstops GROUP BY plate;
 
 -- USERS
 INSERT INTO users (
@@ -203,8 +203,8 @@ INSERT INTO bibuseros (passport, fullname, telephone, email, contract_start, con
 SELECT DISTINCT lib_passport, lib_fullname,  lib_phone, lib_email, TO_DATE(cont_start, 'DD.MM.YYYY'), TO_DATE(cont_end, 'DD.MM.YYYY')  FROM fsdb.busstops;
 
 -- ROUTES
-INSERT INTO routes (id, stop_day, stop_time, town, bibus_id, bibusero_id)
-SELECT route_id, TO_DATE(stopdate, 'DD.MM.YYYY'), TO_TIMESTAMP(stoptime, 'HH24:MI:SS'), town, plate, lib_passport FROM fsdb.busstops;
+INSERT INTO routes (id, stop_day, town, bibus_id, bibusero_id)
+SELECT route_id, TO_DATE(stopdate, 'DD.MM.YYYY'), town, plate, lib_passport FROM fsdb.busstops;
 
 -- LIBRARIES
 INSERT INTO libraries (CIF, name, foundation_date, town, address, email, telephone)
