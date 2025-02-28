@@ -127,15 +127,6 @@ CREATE TABLE routes (
     bibusero_id VARCHAR2(255) NOT NULL REFERENCES bibuseros(passport)
 );
 
-CREATE TABLE reservation (
-    id NUMBER PRIMARY KEY,
-    copy_id VARCHAR2(255) NOT NULL REFERENCES copies(id),
-    user_id NUMBER NOT NULL REFERENCES users(id),
-    route_id VARCHAR2(255) NOT NULL REFERENCES routes(id),
-    reservation_date DATE NOT NULL,
-    state VARCHAR2(255) NOT NULL        
-);
-
 CREATE TABLE libraries (
     CIF NUMBER PRIMARY KEY,
     name VARCHAR2(255) NOT NULL,
