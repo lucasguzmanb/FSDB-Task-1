@@ -93,7 +93,7 @@ CREATE TABLE users (
     address VARCHAR2(255) NOT NULL,
     email VARCHAR2(255) NULL,
     telephone NUMBER(9) NOT NULL,
-    CONSTRAINT email_ct CHECK (email IS NULL OR email LIKE '%@%.%')
+    CONSTRAINT email_users_ct CHECK (email IS NULL OR email LIKE '%@%.%')
 );
 
 CREATE TABLE loans (
@@ -126,7 +126,7 @@ CREATE TABLE bibuseros (
     contract_end DATE NULL,
     state VARCHAR2(255) DEFAULT 'assigned',
     CONSTRAINT state_bibusero_ct CHECK (state IN ('assigned', 'day off', 'occupied')),
-    CONSTRAINT email_ct CHECK (email LIKE '%@%.%')
+    CONSTRAINT email_bibuseros_ct CHECK (email LIKE '%@%.%')
 );
 
 CREATE TABLE routes (
@@ -145,6 +145,6 @@ CREATE TABLE libraries (
     town VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
     address VARCHAR2(255) NOT NULL,
     email VARCHAR2(255) NOT NULL,
-    telephone NUMBER(9) NOT NULL
-    CONSTRAINT email_ct CHECK (email LIKE '%@%.%')
+    telephone NUMBER(9) NOT NULL,
+    CONSTRAINT email_libraries_ct CHECK (email LIKE '%@%.%')
 );
