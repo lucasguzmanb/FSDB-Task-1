@@ -101,7 +101,7 @@ SELECT DISTINCT  TOWN, province, TO_NUMBER(POPULATION), CASE WHEN HAS_LIBRARY = 
 -- BIBUSES
 insert into bibuses (plate, last_itv, next_itv)
 SELECT plate, TO_DATE(MAX(TO_DATE(last_itv, 'DD.MM.YYYY // HH24:MI:SS')), 'DD.MM.YYYY // HH24:MI:SS'), 
-TO_DATE(MIN(TO_DATE(next_itv, 'DD.MM.YYYY')), 'DD.MM.YYYY') FROM fsdb.busstops GROUP BY plate;
+TO_DATE(MAX(TO_DATE(next_itv, 'DD.MM.YYYY')), 'DD.MM.YYYY') FROM fsdb.busstops GROUP BY plate;
 
 -- USERS
 INSERT INTO users (
