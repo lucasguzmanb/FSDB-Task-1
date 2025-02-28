@@ -46,18 +46,22 @@ CREATE TABLE publications (
     content_note VARCHAR2(500) NULL,
     national_id VARCHAR2(255) NOT NULL UNIQUE,
     url VARCHAR2(255) NULL,
-    CONSTRAINT publication_pk PRIMARY KEY(isbn, edition)
+    CONSTRAINT publication_pk PRIMARY KEY(isbn, edition, national_id),
     CONSTRAINT publication_fk FOREIGN KEY (book_title, book_author_id)
         REFERENCES books(title, author_id)
 );
 
 CREATE TABLE copies (
     id VARCHAR2(255) PRIMARY KEY,
-    publication_id VARCHAR2(255) NOT NULL REFERENCES publications(isbn),
+    isbn VARCHAR2(255) NOT NULL,
+    edition VARCHAR2(50) DEFAULT 'Unknown',
+    national_id VARCHAR2(255) NOT NULL,
     condition VARCHAR2(255) DEFAULT 'good',
     comments VARCHAR2(500) NULL,
     available NUMBER(1) DEFAULT 1 NOT NULL,
-    derregistration_date DATE NULL
+    derregistration_date DATE NULL,
+    CONSTRAINT copy_fk FOREIGN KEY (isbn, edition, national_id)
+        REFERENCES publications(isbn, edition, national_id)
 );
 
 CREATE TABLE municipalities (
@@ -81,11 +85,10 @@ CREATE TABLE users (
     surname2 VARCHAR2(255) NULL,
     passport VARCHAR2(20) NOT NULL UNIQUE,
     birthdate DATE NOT NULL,
-    municipality_id VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
+    town VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
     address VARCHAR2(255) NOT NULL,
     email VARCHAR2(255) NULL,
-    telephone NUMBER NOT NULL,
-    is_library NUMBER(1) NOT NULL
+    telephone NUMBER NOT NULL
 );
 
 CREATE TABLE loans (
@@ -96,7 +99,7 @@ CREATE TABLE loans (
     comment_date DATE NULL,
     body VARCHAR2(2000) NULL,
     likes NUMBER DEFAULT 0,
-    dislikes NUMBER DEFAULT 0, 
+    dislikes NUMBER DEFAULT 0,
     CONSTRAINT comment_date_ct CHECK (comment_date IS NULL OR comment_date > return_date)
 );
 
@@ -122,17 +125,17 @@ CREATE TABLE routes (
     id VARCHAR2(255) NOT NULL,
     stop_day DATE NOT NULL,
     stop_time DATE NOT NULL,
-    municipality_id VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
+    town VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
     bibus_id VARCHAR2(255) NOT NULL REFERENCES bibuses(plate),
     bibusero_id VARCHAR2(255) NOT NULL REFERENCES bibuseros(passport),
-    CONSTRAINT route_pk PRIMARY KEY(id, municipality_id)
+    CONSTRAINT route_pk PRIMARY KEY(id, town)
 );
 
 CREATE TABLE libraries (
     CIF NUMBER PRIMARY KEY,
     name VARCHAR2(255) NOT NULL,
     foundation_date DATE NOT NULL,
-    municipality_id VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
+    town VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
     address VARCHAR2(255) NOT NULL,
     email VARCHAR2(255) NOT NULL,
     telephone NUMBER NOT NULL

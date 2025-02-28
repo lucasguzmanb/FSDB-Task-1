@@ -72,18 +72,27 @@ FROM fsdb.acervus
 WHERE title IS NOT NULL 
     AND main_author IS NOT NULL
     AND isbn IS NOT NULL
+    AND edition IS NOT NULL
     AND national_lib_id IS NOT NULL;
 
 -- COPIES
 INSERT INTO copies (
   id,
-  publication_id,
+  isbn,
+  edition,
+  national_id,
   comments)
 SELECT
   signature,
   isbn,
+  edition,
+  national_lib_id,
   notes
-FROM fsdb.acervus;
+FROM fsdb.acervus
+WHERE signature IS NOT NULL
+  AND isbn IS NOT NULL
+  AND edition IS NOT NULL
+  AND national_lib_id IS NOT NULL;
 
 -- MUNICIPALITIES
 INSERT INTO municipalities (name, province, population, has_library)
@@ -102,36 +111,41 @@ INSERT INTO users (
     surname2, 
     passport, 
     birthdate, 
-    municipality_id, 
+    town, 
     address, 
     email, 
-    telephone, 
-    is_library
+    telephone
 )
-SELECT DISTINCT user_id, 
-       name, 
-       surname1, 
-       surname2, 
-       passport, 
-       TO_DATE(birthdate, 'DD-MM-YYYY'), 
-       town, 
-       address, 
-       email, 
-       phone,
-       CASE 
-           WHEN UPPER(name) LIKE 'BIBLIOTECA%' THEN 1 
-           ELSE 0 
-       END
+SELECT DISTINCT
+       TO_NUMBER(user_id), 
+       MAX(name), 
+       MAX(surname1), 
+       MAX(surname2), 
+       MAX(passport), 
+       MAX(CASE 
+            WHEN INSTR(birthdate, '/') > 0 
+            THEN TO_DATE(birthdate, 'DD/MM/YYYY') 
+            WHEN INSTR(birthdate, '-') > 0 
+            THEN TO_DATE(birthdate, 'DD-MM-YYYY') 
+            ELSE NULL 
+       END) AS birthdate,
+       MAX(town),
+       MAX(address),
+       MAX(email),
+       MAX(phone)
 FROM fsdb.loans  
 WHERE signature IS NOT NULL
 AND name IS NOT NULL
+AND UPPER(name) NOT LIKE '%BIBLIOTECA%'
 AND surname1 IS NOT NULL
 AND passport IS NOT NULL
 AND birthdate IS NOT NULL
 AND town IS NOT NULL
+AND town IN (SELECT name FROM municipalities)
 AND address IS NOT NULL
 AND phone IS NOT NULL
-AND user_id IS NOT NULL;
+AND user_id IS NOT NULL
+GROUP BY user_id;
 
 -- LOANS
 INSERT INTO loans (
@@ -155,9 +169,10 @@ SELECT DISTINCT
     TO_NUMBER(DISLIKES) AS dislikes
 FROM fsdb.loans
 WHERE SIGNATURE IS NOT NULL 
-  AND NOT REGEXP_LIKE(SIGNATURE, '^\s*$')  -- This filters out empty or whitespace-only signatures
-  AND USER_ID IS NOT NULL
-  AND RETURN IS NOT NULL;
+AND NOT REGEXP_LIKE(SIGNATURE, '^\s*$')  -- This filters out empty or whitespace-only signatures
+AND user_id IS NOT NULL
+AND user_id IN (SELECT id FROM users)
+AND RETURN IS NOT NULL;
 
 -- SANCTIONS
 INSERT INTO sanctions (
@@ -175,19 +190,20 @@ SELECT DISTINCT
     TO_DATE(return, 'DD/MM/YYYY HH24:MI:SS') + (TO_DATE(return, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(date_time, 'DD/MM/YYYY HH24:MI:SS') - 14) AS end_date
 FROM fsdb.loans
 WHERE (TO_DATE(return, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(date_time, 'DD/MM/YYYY HH24:MI:SS')) > 14
-  AND return IS NOT NULL
-  AND user_id IS NOT NULL
-  AND signature IS NOT NULL
-  AND NOT REGEXP_LIKE(signature, '^\s*$');
+AND return IS NOT NULL
+AND user_id IS NOT NULL
+AND user_id IN (SELECT id FROM users)
+AND signature IS NOT NULL
+AND NOT REGEXP_LIKE(signature, '^\s*$');
 
 -- BIBUSEROS
 INSERT INTO bibuseros (passport, fullname, telephone, email, contract_start, contract_end)
 SELECT DISTINCT lib_passport, lib_fullname,  lib_phone, lib_email, TO_DATE(cont_start, 'DD.MM.YYYY'), TO_DATE(cont_end, 'DD.MM.YYYY')  FROM fsdb.busstops;
 
 -- ROUTES
-INSERT INTO routes (id, stop_day, stop_time, municipality_id, bibus_id, bibusero_id)
+INSERT INTO routes (id, stop_day, stop_time, town, bibus_id, bibusero_id)
 SELECT route_id, TO_DATE(stopdate, 'DD.MM.YYYY'), TO_TIMESTAMP(stoptime, 'HH24:MI:SS'), town, plate, lib_passport FROM fsdb.busstops;
 
 -- LIBRARIES
-INSERT INTO libraries (CIF, name, foundation_date, municipality_id, address, email, telephone)
+INSERT INTO libraries (CIF, name, foundation_date, town, address, email, telephone)
 SELECT DISTINCT user_id, name, TO_DATE(birthdate, 'DD.MM.YYYY'), town, address, email, phone FROM fsdb.loans WHERE UPPER(name) LIKE '%BIBLIOTECA%' AND town IN (SELECT name FROM municipalities);
