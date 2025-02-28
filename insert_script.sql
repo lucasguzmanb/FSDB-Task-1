@@ -172,3 +172,25 @@ WHERE SIGNATURE IS NOT NULL
   AND USER_ID IS NOT NULL
   AND RETURN IS NOT NULL;
 
+
+--Sanctions
+
+INSERT INTO sanctions (
+    loan_id, 
+    user_id, 
+    days, 
+    start_date, 
+    end_date
+)
+SELECT DISTINCT
+    signature AS loan_id,
+    user_id,
+    (TO_DATE(return, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(date_time, 'DD/MM/YYYY HH24:MI:SS') - 14) AS days,
+    TO_DATE(return, 'DD/MM/YYYY HH24:MI:SS') AS start_date,
+    TO_DATE(return, 'DD/MM/YYYY HH24:MI:SS') + (TO_DATE(return, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(date_time, 'DD/MM/YYYY HH24:MI:SS') - 14) AS end_date
+FROM fsdb.loans
+WHERE (TO_DATE(return, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(date_time, 'DD/MM/YYYY HH24:MI:SS')) > 14
+  AND return IS NOT NULL
+  AND user_id IS NOT NULL
+  AND signature IS NOT NULL
+  AND NOT REGEXP_LIKE(signature, '^\s*$');
