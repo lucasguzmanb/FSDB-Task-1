@@ -95,13 +95,31 @@ WHERE signature IS NOT NULL
   AND national_lib_id IS NOT NULL;
 
 -- MUNICIPALITIES
-INSERT INTO municipalities (name, province, population, has_library)
-SELECT DISTINCT  TOWN, province, TO_NUMBER(POPULATION), CASE WHEN HAS_LIBRARY = 'Y' THEN 1 ELSE 0 END FROM fsdb.busstops;
+INSERT INTO municipalities (
+    name,
+    province,
+    population,
+    has_library
+    )
+SELECT DISTINCT
+    TOWN,
+    province,
+    TO_NUMBER(POPULATION),
+    CASE WHEN HAS_LIBRARY = 'Y' THEN 1 ELSE 0 END 
+    FROM fsdb.busstops;
 
 -- BIBUSES
-insert into bibuses (plate, last_itv, next_itv)
-SELECT plate, TO_DATE(MAX(TO_DATE(last_itv, 'DD.MM.YYYY // HH24:MI:SS')), 'DD.MM.YYYY // HH24:MI:SS'), 
-TO_DATE(MAX(TO_DATE(next_itv, 'DD.MM.YYYY')), 'DD.MM.YYYY') FROM fsdb.busstops GROUP BY plate;
+INSERT INTO bibuses (
+    plate,
+    last_itv,
+    next_itv
+    )
+SELECT
+    plate,
+    TO_DATE(MAX(TO_DATE(last_itv, 'DD.MM.YYYY // HH24:MI:SS')), 'DD.MM.YYYY // HH24:MI:SS'),
+    TO_DATE(MAX(TO_DATE(next_itv, 'DD.MM.YYYY')), 'DD.MM.YYYY') 
+    FROM fsdb.busstops 
+    GROUP BY plate;
 
 -- USERS
 INSERT INTO users (
@@ -169,7 +187,6 @@ SELECT DISTINCT
     TO_NUMBER(DISLIKES) AS dislikes
 FROM fsdb.loans
 WHERE SIGNATURE IS NOT NULL 
-AND NOT REGEXP_LIKE(SIGNATURE, '^\s*$')  -- This filters out empty or whitespace-only signatures
 AND user_id IS NOT NULL
 AND user_id IN (SELECT id FROM users)
 AND RETURN IS NOT NULL;
@@ -194,16 +211,59 @@ AND return IS NOT NULL
 AND user_id IS NOT NULL
 AND user_id IN (SELECT id FROM users)
 AND signature IS NOT NULL
-AND NOT REGEXP_LIKE(signature, '^\s*$');
 
 -- BIBUSEROS
-INSERT INTO bibuseros (passport, fullname, telephone, email, contract_start, contract_end)
-SELECT DISTINCT lib_passport, lib_fullname,  lib_phone, lib_email, TO_DATE(cont_start, 'DD.MM.YYYY'), TO_DATE(cont_end, 'DD.MM.YYYY')  FROM fsdb.busstops;
+INSERT INTO bibuseros (
+    passport,
+    fullname,
+    telephone,
+    email,
+    contract_start,
+    contract_end
+    )
+SELECT DISTINCT 
+    lib_passport,
+    lib_fullname,
+    lib_phone,
+    lib_email,
+    TO_DATE(cont_start, 'DD.MM.YYYY'),
+    TO_DATE(cont_end, 'DD.MM.YYYY')
+FROM fsdb.busstops;
 
 -- ROUTES
-INSERT INTO routes (id, stop_day, town, bibus_id, bibusero_id)
-SELECT route_id, TO_DATE(stopdate, 'DD.MM.YYYY'), town, plate, lib_passport FROM fsdb.busstops;
+INSERT INTO routes (
+    id,
+    stop_day,
+    town,
+    bibus_id,
+    bibusero_id
+    )
+SELECT
+    route_id,
+    TO_DATE(stopdate, 'DD.MM.YYYY'),
+    town,
+    plate,
+    lib_passport 
+FROM fsdb.busstops;
 
 -- LIBRARIES
-INSERT INTO libraries (CIF, name, foundation_date, town, address, email, telephone)
-SELECT DISTINCT user_id, name, TO_DATE(birthdate, 'DD.MM.YYYY'), town, address, email, phone FROM fsdb.loans WHERE UPPER(name) LIKE '%BIBLIOTECA%' AND town IN (SELECT name FROM municipalities);
+INSERT INTO libraries (
+    CIF,
+    name,
+    foundation_date,
+    town,
+    address,
+    email,
+    telephone
+    )
+SELECT DISTINCT
+    user_id,
+    name,
+    TO_DATE(birthdate, 'DD.MM.YYYY'),
+    town,
+    address,
+    email,
+    phone 
+FROM fsdb.loans 
+WHERE UPPER(name) LIKE '%BIBLIOTECA%' 
+AND town IN (SELECT name FROM municipalities);
