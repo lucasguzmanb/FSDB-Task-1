@@ -103,7 +103,7 @@ CREATE TABLE loans (
 CREATE TABLE sanctions (
     loan_id VARCHAR2(255) PRIMARY KEY REFERENCES loans(id),
     user_id NUMBER NOT NULL REFERENCES users(id),
-    weeks NUMBER NOT NULL,
+    days NUMBER NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL
 );
