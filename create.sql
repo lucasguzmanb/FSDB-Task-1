@@ -118,7 +118,7 @@ CREATE TABLE bibuseros (
 );
 
 CREATE TABLE routes (
-    id VARCHAR2(255) PRIMARY KEY,
+    id VARCHAR2(255) NOT NULL,
     stop_day DATE NOT NULL,
     stop_time DATE NOT NULL,
     municipality_id VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
