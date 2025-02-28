@@ -32,38 +32,6 @@ FROM fsdb.acervus
 WHERE title IS NOT NULL AND main_author IS NOT NULL
 GROUP BY title, main_author;
 
--- COPIES
-INSERT INTO copies (
-  id,
-  publication_id,
-  comments)
-SELECT
-  signature,
-  isbn,
-  notes
-FROM fsdb.acervus;
-
--- MUNICIPALITIES
-INSERT INTO municipalities (name, province, population, has_library)
-SELECT DISTINCT  TOWN, province, TO_NUMBER(POPULATION), CASE WHEN HAS_LIBRARY = 'Y' THEN 1 ELSE 0 END FROM fsdb.busstops;
-
--- LIBRARIES
-insert into libraries (CIF, name, foundation_date, municipality_id, address, email, telephone)
-select distinct user_id, name, TO_DATE(birthdate, 'DD.MM.YYYY'), town, address, email, phone from fsdb.loans where UPPER(name) like '%BIBLIOTECA%' AND town IN (SELECT name FROM municipalities);
-
--- BIBUS
-insert into bibuses (plate, last_itv, next_itv)
-SELECT plate, TO_DATE(MAX(TO_DATE(last_itv, 'DD.MM.YYYY // HH24:MI:SS')), 'DD.MM.YYYY // HH24:MI:SS'), 
-TO_DATE(MIN(TO_DATE(next_itv, 'DD.MM.YYYY')), 'DD.MM.YYYY') FROM fsdb.busstops GROUP BY plate;
-
--- BIBUSEROS
-insert into bibuseros (passport, fullname, telephone, email, contract_start, contract_end)
-select distinct lib_passport, lib_fullname,  lib_phone, lib_email, TO_DATE(cont_start, 'DD.MM.YYYY'), TO_DATE(cont_end, 'DD.MM.YYYY')  from fsdb.busstops;
-
--- ROUTES
-INSERT INTO routes (id, stop_day, stop_time, municipality_id, bibus_id, bibusero_id)
-SELECT route_id, TO_DATE(stopdate, 'DD.MM.YYYY'), TO_TIMESTAMP(stoptime, 'HH24:MI:SS'), town, plate, lib_passport FROM fsdb.busstops;
-
 -- PUBLICATIONS
 INSERT INTO publications (
     isbn, 
@@ -106,6 +74,25 @@ WHERE title IS NOT NULL
     AND isbn IS NOT NULL
     AND national_lib_id IS NOT NULL;
 
+-- COPIES
+INSERT INTO copies (
+  id,
+  publication_id,
+  comments)
+SELECT
+  signature,
+  isbn,
+  notes
+FROM fsdb.acervus;
+
+-- MUNICIPALITIES
+INSERT INTO municipalities (name, province, population, has_library)
+SELECT DISTINCT  TOWN, province, TO_NUMBER(POPULATION), CASE WHEN HAS_LIBRARY = 'Y' THEN 1 ELSE 0 END FROM fsdb.busstops;
+
+-- BIBUSES
+insert into bibuses (plate, last_itv, next_itv)
+SELECT plate, TO_DATE(MAX(TO_DATE(last_itv, 'DD.MM.YYYY // HH24:MI:SS')), 'DD.MM.YYYY // HH24:MI:SS'), 
+TO_DATE(MIN(TO_DATE(next_itv, 'DD.MM.YYYY')), 'DD.MM.YYYY') FROM fsdb.busstops GROUP BY plate;
 
 -- USERS
 INSERT INTO users (
@@ -145,7 +132,6 @@ AND town IS NOT NULL
 AND address IS NOT NULL
 AND phone IS NOT NULL
 AND user_id IS NOT NULL;
-
 
 -- LOANS
 INSERT INTO loans (
@@ -193,3 +179,15 @@ WHERE (TO_DATE(return, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(date_time, 'DD/MM/YYYY
   AND user_id IS NOT NULL
   AND signature IS NOT NULL
   AND NOT REGEXP_LIKE(signature, '^\s*$');
+
+-- BIBUSEROS
+INSERT INTO bibuseros (passport, fullname, telephone, email, contract_start, contract_end)
+SELECT DISTINCT lib_passport, lib_fullname,  lib_phone, lib_email, TO_DATE(cont_start, 'DD.MM.YYYY'), TO_DATE(cont_end, 'DD.MM.YYYY')  FROM fsdb.busstops;
+
+-- ROUTES
+INSERT INTO routes (id, stop_day, stop_time, municipality_id, bibus_id, bibusero_id)
+SELECT route_id, TO_DATE(stopdate, 'DD.MM.YYYY'), TO_TIMESTAMP(stoptime, 'HH24:MI:SS'), town, plate, lib_passport FROM fsdb.busstops;
+
+-- LIBRARIES
+INSERT INTO libraries (CIF, name, foundation_date, municipality_id, address, email, telephone)
+SELECT DISTINCT user_id, name, TO_DATE(birthdate, 'DD.MM.YYYY'), town, address, email, phone FROM fsdb.loans WHERE UPPER(name) LIKE '%BIBLIOTECA%' AND town IN (SELECT name FROM municipalities);
