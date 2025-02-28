@@ -8,8 +8,7 @@ SELECT id FROM copies;
 
 
 
-//Para Sanctions debería tener(id, user_id, loan_id, sanction_days, start_date, end_date)
-SELECT DISTINCT ROWNUM //asi creo el id.
+//Para Sanctions debería tener(id, user_id, sanction_days, start_date, end_date)
 SELECT id FROM users// selecciono el id de users
 SELECT id FROM loans //seleccionar loan_id
 //Con esto selecciono las que tienen sanction
@@ -39,16 +38,43 @@ AND TO_DATE(l.return, 'DD/MM/YYYY HH24:MI:SS') - TO_DATE(l.date_time, 'DD/MM/YYY
 //para user_type tengo q poner 1 si es biblioteca y 0 si no//
 
 INSERT INTO users (id, name, surname1, surname2, passport, birthdate, town, municipality_id, address, email, telephone, is_library)
-SELECT l.user_id, l.name, l.surname1, l.surname2, l.passport, 
-       TO_DATE(l.birthdate, 'DD-MM-YYYY'), 
-       l.town, 
-       (SELECT m.id FROM municipalities m WHERE m.name = l.town), -- Buscamos el municipality_id
-       l.address, l.email, l.phone,
+INSERT INTO users (
+    id, 
+    name, 
+    surname1, 
+    surname2, 
+    passport, 
+    birthdate, 
+    municipality_id, 
+    address, 
+    email, 
+    telephone, 
+    is_library
+)
+SELECT DISTINCT TRIM(user_id), 
+       name, 
+       surname1, 
+       surname2, 
+       passport, 
+       TO_DATE(birthdate, 'DD-MM-YYYY'), 
+       town, 
+       address, 
+       email, 
+       phone,
        CASE 
-           WHEN UPPER(l.name) LIKE 'BIBLIOTECA%' THEN 1 
+           WHEN UPPER(name) LIKE 'BIBLIOTECA%' THEN 1 
            ELSE 0 
-       END AS is_library
-FROM fsdb.loans l;
+       END
+FROM fsdb.loans  
+WHERE signature IS NOT NULL
+AND name IS NOT NULL
+AND surname1 IS NOT NULL
+AND passport IS NOT NULL
+AND birthdate IS NOT NULL
+AND town IS NOT NULL
+AND address IS NOT NULL
+AND phone IS NOT NULL
+AND TRIM(user_id) NOT IN (SELECT TRIM(id) FROM users);
 
 
 
