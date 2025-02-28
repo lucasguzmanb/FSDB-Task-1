@@ -152,23 +152,23 @@ INSERT INTO loans (
     start_date, 
     return_date, 
     user_id, 
-    copy_id, 
     comment_date, 
     body, 
     likes, 
     dislikes
 )
-SELECT 
-    SIGNATURE AS id,  
-    TO_DATE(DATE_TIME, 'DD/MM/YYYY HH24:MI:SS') AS start_date,  
-    TO_DATE(RETURN, 'DD/MM/YYYY HH24:MI:SS') AS return_date,  
-    USER_ID,  
-    NULL AS copy_id,  
-    NULL AS comment_date,  
-    POST AS body,  
-    TO_NUMBER(LIKES) AS likes,  
-    TO_NUMBER(DISLIKES) AS dislikes  
+SELECT DISTINCT
+    SIGNATURE AS id, 
+    TO_DATE(DATE_TIME, 'DD/MM/YYYY HH24:MI:SS') AS start_date, 
+    TO_DATE(RETURN, 'DD/MM/YYYY HH24:MI:SS') AS return_date, 
+    TO_NUMBER(USER_ID) AS user_id, 
+    NULL AS comment_date,
+    POST AS body,
+    TO_NUMBER(LIKES) AS likes, 
+    TO_NUMBER(DISLIKES) AS dislikes
 FROM fsdb.loans
-WHERE USER_ID IS NOT NULL  
-  AND SIGNATURE IS NOT NULL;
+WHERE SIGNATURE IS NOT NULL 
+  AND NOT REGEXP_LIKE(SIGNATURE, '^\s*$')  -- This filters out empty or whitespace-only signatures
+  AND USER_ID IS NOT NULL
+  AND RETURN IS NOT NULL;
 
