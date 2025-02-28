@@ -89,7 +89,7 @@ CREATE TABLE users (
     town VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
     address VARCHAR2(255) NOT NULL,
     email VARCHAR2(255) NULL,
-    telephone NUMBER NOT NULL
+    telephone(9) NUMBER NOT NULL
 );
 
 CREATE TABLE loans (
@@ -116,7 +116,7 @@ CREATE TABLE sanctions (
 CREATE TABLE bibuseros (
     passport VARCHAR2(255) PRIMARY KEY,
     fullname VARCHAR2(255) NOT NULL,
-    telephone NUMBER NOT NULL,
+    telephone NUMBER(9) NOT NULL,
     email VARCHAR2(255) NOT NULL,
     contract_start DATE NOT NULL,
     contract_end DATE NULL,
@@ -139,5 +139,5 @@ CREATE TABLE libraries (
     town VARCHAR2(255) NOT NULL REFERENCES municipalities(name),
     address VARCHAR2(255) NOT NULL,
     email VARCHAR2(255) NOT NULL,
-    telephone NUMBER NOT NULL
+    telephone NUMBER(9) NOT NULL
 );
