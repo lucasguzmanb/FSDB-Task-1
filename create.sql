@@ -20,6 +20,7 @@ CREATE TABLE books (
     author_id VARCHAR2(255) NOT NULL REFERENCES authors(main_author),
     pub_country VARCHAR2(255) NULL,
     pub_date NUMBER(4) NULL,
+    original_language VARCHAR2(50) NULL,
     alternative_titles VARCHAR2(255) NULL,
     subject VARCHAR2(255) NULL,
     content_notes VARCHAR2(2500) NULL,
